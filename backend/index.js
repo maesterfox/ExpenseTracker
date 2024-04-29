@@ -38,11 +38,11 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-store.on("error", (err) => console.log(err));
+store.on("error", (err) => console.log(err)); // error handling for the store
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET, // this is used to sign the session ID cookie
     resave: false, // this option specifies whether to save the session to the store on every request
     saveUninitialized: false, // option specifies whether to save uninitialized sessions
     cookie: {
