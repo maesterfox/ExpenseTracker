@@ -100,9 +100,9 @@ const TransactionForm = () => {
               id="category"
               name="category"
             >
-              <option value={"saving"}>Saving</option>
-              <option value={"expense"}>Expense</option>
-              <option value={"investment"}>Investment</option>
+              <option value={"saving"}>Income</option>
+              <option value={"expense"}>Spent</option>
+              <option value={"investment"}>Saved</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
               <svg
