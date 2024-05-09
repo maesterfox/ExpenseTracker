@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 
 const LoginPage = () => {
   const [loginData, setLoginData] = useState({
-    username: "guest",
+    username: "guestuser10@gmail.com",
     password: "password10",
   });
 
