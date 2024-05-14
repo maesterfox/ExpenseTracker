@@ -1,27 +1,28 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import express from "express";
 import http from "http";
 import cors from "cors";
-import dotenv from "dotenv";
 import path from "path";
 import passport from "passport";
 import session from "express-session";
 import connectMongo from "connect-mongodb-session";
-
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-
 import { buildContext } from "graphql-passport";
-
 import mergedResolvers from "./resolvers/index.js";
 import mergedTypeDefs from "./typeDefs/index.js";
-
 import { connectDB } from "./db/connectDB.js";
 import { configurePassport } from "./passport/passport.config.js";
-
 import job from "./cron.js";
 
 dotenv.config();
+
+console.log("MONGO_URI:", process.env.MONGO_URI);
+console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
+
 configurePassport();
 
 job.start();
@@ -59,6 +60,7 @@ const allowedOrigins = [
   "https://expense-tracker-git-main-maesterfoxs-projects.vercel.app",
   "https://exptrack.davidfoxdev.co.uk",
   "http://localhost:3000",
+  "http://localhost:4000/graphql",
 ];
 
 app.use(
