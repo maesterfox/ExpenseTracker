@@ -4,21 +4,13 @@
     {
       "src": "frontend/package.json",
       "use": "@vercel/static-build",
-      "config": { "distDir": "dist" } 
-    },
-    {
-      "src": "backend/index.js",
-      "use": "@vercel/node"
+      "config": { "distDir": "dist" }
     }
   ],
   "routes": [
     {
-      "src": "/graphql",
-      "dest": "/api/graphql"
-    },
-    {
       "src": "/(.*)",
-      "dest": "frontend/dist/$1"
+      "dest": "/frontend/dist/$1"
     }
   ]
 }
