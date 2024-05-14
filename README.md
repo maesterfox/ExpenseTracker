@@ -1,5 +1,4 @@
 # GraphQL Expense Tracker App
-https://github.com/maesterfox/ExpenseTracker.git
 
 ![image](https://github.com/maesterfox/ExpenseTracker/assets/23552939/86550c59-5a39-4005-8e8a-a96f86ca5fd6)
 
@@ -66,4 +65,3 @@ npm run build
 ```shell
 npm start
 ```
-# ExpenseTracker
