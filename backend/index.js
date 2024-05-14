@@ -55,6 +55,11 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+const allowedOrigins = [
+  "https://expense-tracker-ten-green.vercel.app",
+  "http://localhost:3000",
+];
+
 const startServer = async () => {
   const server = new ApolloServer({
     typeDefs: mergedTypeDefs,
@@ -70,12 +75,18 @@ const startServer = async () => {
   app.use(
     "/graphql",
     cors({
-      origin: "http://localhost:3000",
+      origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.indexOf(origin) === -1) {
+          const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
+          return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+      },
       credentials: true,
     }),
     express.json(),
-    // expressMiddleware accepts the same arguments:
-    // an Apollo Server instance and optional configuration options
     expressMiddleware(server, {
       context: async ({ req, res }) => buildContext({ req, res }),
     })
