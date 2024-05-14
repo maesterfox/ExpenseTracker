@@ -3,7 +3,7 @@ import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
 import { BrowserRouter } from "react-router-dom";
-import GridBackground from "./components/ui/GridBackgroun.jsx";
+import GridBackground from "./components/ui/GridBackground.jsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
 // Determine the GraphQL server URI based on the environment
@@ -11,7 +11,7 @@ const client = new ApolloClient({
   uri:
     import.meta.env.VITE_NODE_ENV === "development"
       ? "http://localhost:4000/graphql"
-      : "https://exptrack.davidfoxdev.co.uk/",
+      : "https://exptrack.davidfoxdev.co.uk/graphql",
   cache: new InMemoryCache(),
   credentials: "include",
 });
