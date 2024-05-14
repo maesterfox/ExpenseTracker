@@ -37,16 +37,16 @@ const store = new MongoDBStore({
   collection: "sessions",
 });
 
-store.on("error", (err) => console.log(err)); // error handling for the store
+store.on("error", (err) => console.log("Session store error:", err)); // Error handling for the store
 
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // this is used to sign the session ID cookie
-    resave: false, // this option specifies whether to save the session to the store on every request
-    saveUninitialized: false, // option specifies whether to save uninitialized sessions
+    secret: process.env.SESSION_SECRET, // This is used to sign the session ID cookie
+    resave: false, // This option specifies whether to save the session to the store on every request
+    saveUninitialized: false, // Option specifies whether to save uninitialized sessions
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      httpOnly: true, // this option prevents the Cross-Site Scripting (XSS) attacks
+      httpOnly: true, // This option prevents the Cross-Site Scripting (XSS) attacks
     },
     store: store,
   })
@@ -56,57 +56,63 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const allowedOrigins = [
-  "https://expense-tracker-ten-green.vercel.app",
+  "https://expense-tracker-xi-seven.vercel.app",
+  "https://exptrack.davidfoxdev.co.uk",
   "http://localhost:3000",
 ];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps or curl requests)
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
+
+app.use(express.json());
+
 const startServer = async () => {
-  const server = new ApolloServer({
-    typeDefs: mergedTypeDefs,
-    resolvers: mergedResolvers,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  });
+  try {
+    const server = new ApolloServer({
+      typeDefs: mergedTypeDefs,
+      resolvers: mergedResolvers,
+      plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    });
 
-  // Ensure we wait for our server to start
-  await server.start();
+    // Ensure we wait for our server to start
+    await server.start();
 
-  // Set up our Express middleware to handle CORS, body parsing,
-  // and our expressMiddleware function.
-  app.use(
-    "/graphql",
-    cors({
-      origin: function (origin, callback) {
-        // Allow requests with no origin (like mobile apps or curl requests)
-        if (!origin) return callback(null, true);
-        if (allowedOrigins.indexOf(origin) === -1) {
-          const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
-          return callback(new Error(msg), false);
-        }
-        return callback(null, true);
-      },
-      credentials: true,
-    }),
-    express.json(),
-    expressMiddleware(server, {
-      context: async ({ req, res }) => buildContext({ req, res }),
-    })
-  );
+    // Set up our Express middleware to handle CORS, body parsing,
+    // and our expressMiddleware function.
+    app.use(
+      "/graphql",
+      expressMiddleware(server, {
+        context: async ({ req, res }) => buildContext({ req, res }),
+      })
+    );
 
-  // Serve static files from the frontend build directory
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+    // Serve static files from the frontend build directory
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-  // Fallback to index.html for all other routes
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
-  });
+    // Fallback to index.html for all other routes
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+    });
 
-  // Start the server and connect to the database
-  await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
-  await connectDB();
-
-  console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+    // Start the server and connect to the database
+    await connectDB();
+    httpServer.listen({ port: 4000 }, () => {
+      console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error);
+  }
 };
 
-startServer().catch((error) => {
-  console.error("Failed to start server:", error);
-});
+startServer();
