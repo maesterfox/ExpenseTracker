@@ -18,36 +18,40 @@ import { connectDB } from "./db/connectDB.js";
 import { configurePassport } from "./passport/passport.config.js";
 import job from "./cron.js";
 
+// Load environment variables
 dotenv.config();
 
+// Log environment variables for debugging
 console.log("MONGO_URI:", process.env.MONGO_URI);
 console.log("SESSION_SECRET:", process.env.SESSION_SECRET);
 
+// Configure Passport
 configurePassport();
 
+// Start cron job
 job.start();
 
 const __dirname = path.resolve();
 const app = express();
 const httpServer = http.createServer(app);
 
+// Configure session store
 const MongoDBStore = connectMongo(session);
-
 const store = new MongoDBStore({
   uri: process.env.MONGO_URI,
   collection: "sessions",
 });
+store.on("error", (err) => console.log("Session store error:", err));
 
-store.on("error", (err) => console.log("Session store error:", err)); // Error handling for the store
-
+// Configure session middleware
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // This is used to sign the session ID cookie
-    resave: false, // This option specifies whether to save the session to the store on every request
-    saveUninitialized: false, // Option specifies whether to save uninitialized sessions
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
       maxAge: 1000 * 60 * 60 * 24 * 7,
-      httpOnly: true, // This option prevents the Cross-Site Scripting (XSS) attacks
+      httpOnly: true,
     },
     store: store,
   })
@@ -56,17 +60,17 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Configure CORS
 const allowedOrigins = [
   "https://expense-tracker-git-main-maesterfoxs-projects.vercel.app",
   "https://exptrack.davidfoxdev.co.uk",
   "http://localhost:3000",
-  "http://localhost:4000/graphql",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
       if (allowedOrigins.indexOf(origin) === -1) {
         const msg = `The CORS policy for this site does not allow access from the specified origin: ${origin}`;
         return callback(new Error(msg), false);
@@ -79,6 +83,7 @@ app.use(
 
 app.use(express.json());
 
+// Start the Apollo Server
 const startServer = async () => {
   try {
     const server = new ApolloServer({
@@ -87,11 +92,8 @@ const startServer = async () => {
       plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
     });
 
-    // Ensure we wait for our server to start
     await server.start();
 
-    // Set up our Express middleware to handle CORS, body parsing,
-    // and our expressMiddleware function.
     app.use(
       "/graphql",
       expressMiddleware(server, {
@@ -99,15 +101,12 @@ const startServer = async () => {
       })
     );
 
-    // Serve static files from the frontend build directory
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-    // Fallback to index.html for all other routes
     app.get("*", (req, res) => {
       res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
     });
 
-    // Start the server and connect to the database
     await connectDB();
     httpServer.listen({ port: 4000 }, () => {
       console.log(`🚀 Server ready at http://localhost:4000/graphql`);
