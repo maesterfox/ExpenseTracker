@@ -56,7 +56,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const allowedOrigins = [
-  "https://expense-tracker-xi-seven.vercel.app",
+  "https://expense-tracker-git-main-maesterfoxs-projects.vercel.app",
   "https://exptrack.davidfoxdev.co.uk",
   "http://localhost:3000",
 ];
