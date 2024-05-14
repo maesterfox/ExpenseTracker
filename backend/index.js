@@ -92,14 +92,15 @@ const startServer = async () => {
     })
   );
 
-  // npm run build will build your frontend app, and it will the optimized version of your app
+  // Serve static files from the frontend build directory
   app.use(express.static(path.join(__dirname, "frontend/dist")));
 
+  // Fallback to index.html for all other routes
   app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
   });
 
-  // Modified server startup
+  // Start the server and connect to the database
   await new Promise((resolve) => httpServer.listen({ port: 4000 }, resolve));
   await connectDB();
 

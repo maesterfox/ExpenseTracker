@@ -14,6 +14,10 @@
     {
       "src": "/(.*)",
       "dest": "frontend/dist/$1"
+    },
+    {
+      "src": "/graphql",
+      "dest": "/api/graphql"
     }
   ]
 }
