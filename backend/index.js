@@ -93,11 +93,11 @@ const startServer = async () => {
   );
 
   // Serve static files from the frontend build directory
-  app.use(express.static(path.join(__dirname, "frontend/dist")));
+  app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
   // Fallback to index.html for all other routes
   app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "frontend/dist", "index.html"));
+    res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
   });
 
   // Start the server and connect to the database
