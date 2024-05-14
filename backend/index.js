@@ -62,9 +62,11 @@ app.use(passport.session());
 
 // Configure CORS
 const allowedOrigins = [
-  "https://expense-tracker-git-main-maesterfoxs-projects.vercel.app",
-  "https://exptrack.davidfoxdev.co.uk",
+  "https://expense.davidfoxdev.co.uk",
+  "https://expense.davidfoxdev.co.uk:4000",
+  "https://expense.davidfoxdev.co.uk/graphql",
   "http://localhost:3000",
+  "http://localhost:4000",
 ];
 
 app.use(
