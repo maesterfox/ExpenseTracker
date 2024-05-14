@@ -6,11 +6,12 @@ import { BrowserRouter } from "react-router-dom";
 import GridBackground from "./components/ui/GridBackgroun.jsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
+// Determine the GraphQL server URI based on the environment
 const client = new ApolloClient({
   uri:
     import.meta.env.VITE_NODE_ENV === "development"
       ? "http://localhost:4000/graphql"
-      : "http://ec2-13-50-240-13.eu-north-1.compute.amazonaws.com/graphql", // update with your actual EC2 public DNS
+      : "https://exptrack.davidfoxdev.co.uk/graphql", // Use HTTPS for production
   cache: new InMemoryCache(),
   credentials: "include",
 });
