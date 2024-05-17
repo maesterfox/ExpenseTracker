@@ -9,9 +9,6 @@ lerna-debug.log*
 
 node_modules
 # Ignore dist at the root level, but not in frontend folder
-/dist
-!/frontend/dist
-dist-ssr
 *.local
 
 # Editor directories and files
