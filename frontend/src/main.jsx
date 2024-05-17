@@ -6,12 +6,11 @@ import { BrowserRouter } from "react-router-dom";
 import GridBackground from "./components/ui/GridBackground.jsx";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 
-// Determine the GraphQL server URI based on the environment
 const client = new ApolloClient({
   uri:
-    import.meta.env.VITE_NODE_ENV === "development"
+    import.meta.env.NODE_ENV === "development"
       ? "http://localhost:4000/graphql"
-      : "https://expense-tracker-maesterfoxs-projects.vercel.app/graphql",
+      : "https://expense-tracker-xi-seven.vercel.app/graphql",
   cache: new InMemoryCache(),
   credentials: "include",
 });

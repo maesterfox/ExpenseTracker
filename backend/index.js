@@ -62,7 +62,7 @@ app.use(passport.session());
 
 // Configure CORS
 const allowedOrigins = [
-  "https://expense.davidfoxdev.co.uk",
+  "https://expense-tracker-xi-seven.vercel.app",
   "http://localhost:3000",
 ];
 
@@ -107,10 +107,14 @@ const startServer = async () => {
     });
 
     await connectDB();
-    return app;
+    httpServer.listen({ port: 4000 }, () => {
+      console.log(`🚀 Server ready at http://localhost:4000/graphql`);
+    });
   } catch (error) {
     console.error("Failed to start server:", error);
   }
 };
 
-export default startServer();
+startServer();
+
+export default app;
