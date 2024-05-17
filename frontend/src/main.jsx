@@ -11,7 +11,7 @@ const client = new ApolloClient({
   uri:
     import.meta.env.VITE_NODE_ENV === "development"
       ? "http://localhost:4000/graphql"
-      : "https://expense.davidfoxdev.co.uk/graphql",
+      : "https://expense-tracker-maesterfoxs-projects.vercel.app/graphql",
   cache: new InMemoryCache(),
   credentials: "include",
 });
