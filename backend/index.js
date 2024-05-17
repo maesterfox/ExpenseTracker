@@ -6,9 +6,11 @@ import path from "path";
 import passport from "passport";
 import session from "express-session";
 import connectMongo from "connect-mongodb-session";
+
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
+
 import { buildContext } from "graphql-passport";
 
 import mergedResolvers from "./resolvers/index.js";
@@ -16,6 +18,7 @@ import mergedTypeDefs from "./typeDefs/index.js";
 
 import { connectDB } from "./db/connectDB.js";
 import { configurePassport } from "./passport/passport.config.js";
+
 import job from "./cron.js";
 
 dotenv.config();
@@ -69,7 +72,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:5173", // Include this for local development with Vite
-      "https://expense-tracker-xi-seven.vercel.app", // Add your Vercel production URL
+      "https://expensetracker-production-be21.up.railway.app", // Add your Railway production URL
     ],
     credentials: true,
   }),
