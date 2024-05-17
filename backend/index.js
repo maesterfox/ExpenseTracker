@@ -107,12 +107,10 @@ const startServer = async () => {
     });
 
     await connectDB();
-    httpServer.listen({ port: 4000 }, () => {
-      console.log(`🚀 Server ready at http://localhost:4000/graphql`);
-    });
+    return app;
   } catch (error) {
     console.error("Failed to start server:", error);
   }
 };
 
-startServer();
+export default startServer();
