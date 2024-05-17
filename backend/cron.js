@@ -1,7 +1,7 @@
 import cron from "cron";
 import https from "https";
 
-const URL = "https://expense-tracker-ten-green.vercel.app/";
+const URL = "https://expense-tracker-maesterfoxs-projects.vercel.app/";
 
 const job = new cron.CronJob("*/14 * * * *", function () {
   https

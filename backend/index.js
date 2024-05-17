@@ -4,13 +4,13 @@ dotenv.config();
 import express from "express";
 import http from "http";
 import cors from "cors";
+import { ApolloServer } from "@apollo/server";
+import { expressMiddleware } from "@apollo/server/express4";
+import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import path from "path";
 import passport from "passport";
 import session from "express-session";
 import connectMongo from "connect-mongodb-session";
-import { ApolloServer } from "@apollo/server";
-import { expressMiddleware } from "@apollo/server/express4";
-import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import { buildContext } from "graphql-passport";
 import mergedResolvers from "./resolvers/index.js";
 import mergedTypeDefs from "./typeDefs/index.js";
@@ -63,7 +63,7 @@ app.use(passport.session());
 // Configure CORS
 const allowedOrigins = [
   "https://expense-tracker-xi-seven.vercel.app",
-  "http://localhost:3000",
+  "http://localhost:5173", // Ensure this is the correct port for your local development server
 ];
 
 app.use(
@@ -117,4 +117,4 @@ const startServer = async () => {
 
 startServer();
 
-export default app;
+export default startServer();
