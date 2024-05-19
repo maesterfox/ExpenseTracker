@@ -34,7 +34,11 @@ store.on("error", (err) => console.log(err));
 // Configure CORS before defining routes
 app.use(
   cors({
-    origin: ["https://expense.davidfoxdev.co.uk", "http://localhost:5173"],
+    origin: [
+      "https://expense.davidfoxdev.co.uk",
+      "http://localhost:5173",
+      "https://expensetracker-production-be21.up.railway.app",
+    ],
     credentials: true,
   })
 );
