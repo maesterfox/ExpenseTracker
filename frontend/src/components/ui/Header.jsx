@@ -1,10 +1,8 @@
 import { Link } from "react-router-dom";
-import Logo from "../../../public/logo.png";
 
 const Header = () => {
   return (
     <div className="mb-10">
-      {Logo}
       <h1 className="md:text-6xl text-4xl lg:text-8xl font-bold text-center  relative z-50 text-white pt-10">
         Fox Expense <Link to="/">GQL</Link>
       </h1>
