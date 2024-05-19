@@ -1,30 +1,22 @@
-import express from "express";
-import http from "http";
-import cors from "cors";
-import dotenv from "dotenv";
 import path from "path";
-import passport from "passport";
+import express from "express";
 import session from "express-session";
 import connectMongo from "connect-mongodb-session";
-
+import passport from "passport";
+import http from "http";
+import cors from "cors";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-
 import { buildContext } from "graphql-passport";
-
 import mergedResolvers from "./resolvers/index.js";
 import mergedTypeDefs from "./typeDefs/index.js";
-
 import { connectDB } from "./db/connectDB.js";
+import dotenv from "dotenv";
 import { configurePassport } from "./passport/passport.config.js";
 
-import job from "./cron.js";
-
 dotenv.config();
-configurePassport();
-
-job.start();
+await configurePassport();
 
 const __dirname = path.resolve();
 const app = express();
@@ -38,6 +30,14 @@ const store = new MongoDBStore({
 });
 
 store.on("error", (err) => console.log(err));
+
+// Configure CORS before defining routes
+app.use(
+  cors({
+    origin: ["https://expense.davidfoxdev.co.uk", "http://localhost:5173"],
+    credentials: true,
+  })
+);
 
 app.use(
   session({
@@ -61,32 +61,21 @@ const server = new ApolloServer({
   plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
 });
 
-// Ensure we wait for our server to start
 await server.start();
 
-// Set up our Express middleware to handle CORS, body parsing,
-// and our expressMiddleware function.
 app.use(
   "/graphql",
-  cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5173", // Include this for local development with Vite
-      "https://expensetracker-production-be21.up.railway.app", // Add your Railway production URL
-    ],
-    credentials: true,
-  }),
   express.json(),
   expressMiddleware(server, {
     context: async ({ req, res }) => buildContext({ req, res }),
   })
 );
 
-// Serve static files from the frontend build directory
-app.use(express.static(path.join(__dirname, "../frontend/dist")));
+const staticFilesPath = path.join(__dirname, "../frontend/dist");
+app.use(express.static(staticFilesPath));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/dist", "index.html"));
+  res.sendFile(path.join(staticFilesPath, "index.html"));
 });
 
 await connectDB();
