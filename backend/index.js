@@ -68,7 +68,7 @@ app.use(
   cors({
     origin: [
       "https://expense.davidfoxdev.co.uk",
-      "http://localhost:5173",
+      "http://localhost:4000",
       "https://expensetracker-production-be21.up.railway.app",
     ],
     credentials: true,
