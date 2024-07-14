@@ -10,7 +10,7 @@
 	},
 	"type": "module",
 	"keywords": [],
-	"author": "",
+	"author": "David Fox",
 	"license": "ISC",
 	"dependencies": {
 		"@apollo/server": "^4.10.0",
