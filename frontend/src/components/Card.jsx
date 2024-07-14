@@ -1,7 +1,7 @@
 import { FaLocationDot } from "react-icons/fa6";
 import { BsCardText } from "react-icons/bs";
 import { MdOutlinePayments } from "react-icons/md";
-import { FaSackPound } from "react-icons/fa6";
+import { FaPoundSign } from "react-icons/fa";
 import { FaTrash } from "react-icons/fa";
 import { HiPencilAlt } from "react-icons/hi";
 import { Link } from "react-router-dom";
@@ -70,7 +70,7 @@ const Card = ({ transaction, authUser }) => {
           Payment Type: {paymentType}
         </p>
         <p className="text-white flex items-center gap-1">
-          <FaSackPound />
+          <FaPoundSign />
           Amount: £{amount}
         </p>
         <p className="text-white flex items-center gap-1">
